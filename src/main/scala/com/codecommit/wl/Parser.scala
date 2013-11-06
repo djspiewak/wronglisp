@@ -35,18 +35,20 @@ trait Parser extends AST with RegexParsers {
     | "(" ~> expr <~ ")"
     | "{" ~> expr <~ "}"
     
-    | open ~> expr ~ expr ~ expr <~ ")" ^^ Expr.S3
-    | open ~> expr ~ expr <~ ")"        ^^ Expr.S2
-    | open ~> expr <~ ")"               ^^ Expr.S1
-    | open ~> ")"                      ^^^ Expr.S
+    | openS ~> expr ~ expr ~ expr <~ ")" ^^ Expr.S3
+    | openS ~> expr ~ expr <~ ")"        ^^ Expr.S2
+    | openS ~> expr <~ ")"               ^^ Expr.S1
+    | openS ~> ")"                      ^^^ Expr.S
     
-    | open ~> expr ~ expr <~ "]"        ^^ Expr.K2
-    | open ~> expr <~ "]"               ^^ Expr.K1
-    | open ~> "]"                      ^^^ Expr.K
+    | openK ~> expr ~ expr <~ "]"        ^^ Expr.K2
+    | openK ~> expr <~ "]"               ^^ Expr.K1
+    | openK ~> "]"                      ^^^ Expr.K
     
-    | open ~> expr <~ "}"               ^^ Expr.I1
-    | open ~> "}"                      ^^^ Expr.I
+    | openI ~> expr <~ "}"               ^^ Expr.I1
+    | openI ~> "}"                      ^^^ Expr.I
   )
   
-  lazy val open: Parser[String] = """[\[({]""".r
+  lazy val openS: Parser[String] = """[\[{]""".r
+  lazy val openK: Parser[String] = """[({]""".r
+  lazy val openI: Parser[String] = """[(\[]""".r
 }
